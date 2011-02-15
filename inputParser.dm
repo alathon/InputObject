@@ -18,7 +18,7 @@ inputParser/default
 			var/textCmp = (I.__ignoreCase) ? "cmptext":"cmptextEx"
 			for(var/a in I.__answers)
 				if(I.__autoComplete)
-					match = Short2Full(n, a, I.__ignoreCase)
+					match = inputOps.short2full(n, a, I.__ignoreCase)
 				else
 					match = call(textCmp)(n,a)
 				if(match)
@@ -34,10 +34,10 @@ inputParser/default
 	answer_yesno
 		key = "yesno"
 		parse(Input/I, n)
-			if(Short2Full(n,"yes", 1)) // Always ignore case
+			if(inputOps.short2full(n,"yes", 1)) // Always ignore case
 				I.__input = "yes"
 				return
-			else if(Short2Full(n,"no",1)) // always ignore case
+			else if(inputOps.short2full(n,"no",1)) // always ignore case
 				I.__input = "no"
 				return
 			else
@@ -46,6 +46,8 @@ inputParser/default
 	answer_num
 		key = "num"
 		parse(Input/I, n)
+			if(!n || (inputOps.whitespace(n) == length(n)))
+				return new/inputError("Not a number.")
 			var/t2n = text2num(n)
 			if("[n]" == "[t2n]")
 				I.__input = t2n

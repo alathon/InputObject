@@ -9,6 +9,19 @@ inputOptions
 		addFormatter("default", /inputFormatter/default)
 
 	proc
+		short2full(short, full, ignorecase = 1)
+			if(!short) return 0
+
+			if(ignorecase)
+				return (cmptext(short, copytext(full,1,length(short)+1)))
+			else
+				return (cmptextEx(short, copytext(full,1,length(short)+1)))
+
+		whitespace(n)
+			. = 0
+			for(var/a = 1 to length(n))
+				if(text2ascii(copytext(n,a,a+1)) == 32) .++
+
 		addParser(key, path)
 			if(key in __inputParsers) return 0
 			if(istype(path, /inputParser))

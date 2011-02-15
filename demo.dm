@@ -1,10 +1,5 @@
 #define DEMO_MODE
 #ifdef DEMO_MODE
-inputOptions
-	New()
-		..()
-		addParser("any", /inputParser/default/answer_any)
-		addParser("list", /inputParser/default/answer_list)
 Input
 	New(q, ip, formatter)
 		__state = inputOps.STATE_READY
@@ -21,6 +16,12 @@ client/Command(T)
 	else
 		world << "Uncaught: [T]"
 
+client/proc/TestNum()
+	spawn()
+		var/Input/I = new("Answer with a number", "num")
+		var/a = I.getInput(src)
+		world << "Answer: [a]"
+
 client/proc/TestYesno()
 	spawn()
 		var/Input/I = new("Answer yes or no to this question.", "yesno")
@@ -32,4 +33,5 @@ client/proc/TestInput()
 		var/Input/I = new("Some Question", "any")
 		var/a = I.getInput(src)
 		world << "Answer: [a]"
+
 #endif
