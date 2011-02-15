@@ -45,9 +45,12 @@ Input
 			if(istype(E, /inputError))
 				__state = inputOps.STATE_ERROR
 				__error = E
+
+				// TODO: Implement the __maxTries option
+				/*
 				if(__maxTries)
 					if(++__tryCount == __maxTries)
-					
+				*/	
 			else
 				__state = inputOps.STATE_DONE
 
