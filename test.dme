@@ -16,10 +16,14 @@
 // BEGIN_INCLUDE
 #include "client.dm"
 #include "input.dm"
-#include "demo.dm"
 #include "inputError.dm"
 #include "inputFormatter.dm"
 #include "inputOptions.dm"
 #include "inputParser.dm"
 // END_INCLUDE
 
+#ifdef __MAIN__
+#include "demo.dm"
+#elif DEMO_MODE
+#include "demo.dm"
+#endif

@@ -1,11 +1,13 @@
-#define DEMO_MODE
-#ifdef DEMO_MODE
 Input
 	New(q, ip, formatter)
 		__state = inputOps.STATE_READY
 		__parser = inputOps.getParser(ip) || inputOps.getParser("any")
 		__formatter = inputOps.getFormatter(formatter) || inputOps.getFormatter("default")
 		__question = q
+
+inputFormatter
+	send(txt)
+		world << txt
 
 client/Command(T)
 	if(__target)
@@ -71,4 +73,3 @@ client/proc/TestInput()
 		var/a = I.getInput(src)
 		world << "Answer: [a]"
 
-#endif

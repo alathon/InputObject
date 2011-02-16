@@ -6,11 +6,6 @@ inputFormatter
 
 	// Default just prints 'as-is'
 	default
-		#ifdef DEMO_MODE
-		send(txt)
-			world << txt
-
-		#endif
 		proc
 			formatList(list/A)
 				. = ""
