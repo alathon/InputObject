@@ -59,3 +59,5 @@ inputOptions
 
 		FORMAT_QUESTION = 1
 		FORMAT_ERROR = 2
+
+		BAD_INPUT = "AKLSJD&*^@#!*()_)JKSDAKLJS)(@*#($*(%*Y@()#)*(:"

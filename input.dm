@@ -23,7 +23,8 @@ Input
 		// Options for parsing
 		__autoComplete // Used by answer_list and answer_yesno
 		__timeout // NOT IMPLEMENTED
-		__maxTries // NOT IMPLEMENTED
+		__maxTries
+		__tryCount = 0
 		__ignoreCase // Used by answer_list
 		__confirm // NOT IMPLEMENTED
 
@@ -46,11 +47,6 @@ Input
 				__state = inputOps.STATE_ERROR
 				__error = E
 
-				// TODO: Implement the __maxTries option
-/*
-				if(__maxTries)
-					if(++__tryCount == __maxTries)
-*/
 			else
 				__state = inputOps.STATE_DONE
 
@@ -92,7 +88,13 @@ Input
 					break
 				else if(__state == inputOps.STATE_ERROR)
 					__errorUser()
-					__state = inputOps.STATE_ACCEPT
+
+					// __maxTries option
+					if(__maxTries && (++__tryCount < __maxTries))
+						__state = inputOps.STATE_ACCEPT
+					else
+						__input = inputOps.BAD_INPUT
+						break
 
 			spawn()
 				__cleanAndExit()

@@ -16,6 +16,13 @@ client/Command(T)
 	else
 		world << "Uncaught: [T]"
 
+client/proc/TestTry()
+	spawn()
+		var/Input/I = new("Get it wrong 3 times!", "num")
+		I.__maxTries = 3
+		var/a = I.getInput(src)
+		world << "Answer: [a]"
+
 client/proc/TestNum()
 	spawn()
 		var/Input/I = new("Answer with a number", "num")
