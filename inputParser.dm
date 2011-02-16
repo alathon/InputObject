@@ -26,6 +26,10 @@ inputParser/default
 					break
 
 			if(!match)
+				var/n_num = text2num(n)
+				if("[n_num]" == "[n]" && n_num >= 1 && n_num <= length(I.__answers))
+					I.__input = I.__answers[n_num]
+					return
 				return new/inputError("Invalid answer.")
 			else
 				I.__input = n

@@ -24,7 +24,6 @@ Input
 		__confirmWith
 
 		// Options for parsing
-		__answerType
 		__callback = null
 		__autoComplete = 0 // Don't auto-complete list answers by default
 		__timeout = 0

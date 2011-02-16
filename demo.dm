@@ -19,6 +19,8 @@ client/Command(T)
 client/proc/TestConfirm()
 	spawn()
 		var/Input/I = new("You should confirm this input.", "any")
+		// Suggested replacement API:
+		//I.setConfirm("Confirm what you just typed before, please.")
 		I.__confirm = 1
 		I.__confirmQuestion = "Confirm what you just typed before, please."
 		var/a = I.getInput(src)
@@ -27,13 +29,25 @@ client/proc/TestConfirm()
 client/proc/TestTime()
 	spawn()
 		var/Input/I = new("You have 3 seconds!", "any")
+		// Suggested replacement API:
+		//I.setTimeout(3)
 		I.__timeout = 3
+		var/a = I.getInput(src)
+		world << "Answer: [a]"
+
+client/proc/TestCSL()
+	spawn()
+		var/Input/I = new("Pick from a list", "list")
+		I.__answers = list("bob","joe","salamander")
+		I.__autoComplete = 1
 		var/a = I.getInput(src)
 		world << "Answer: [a]"
 
 client/proc/TestTry()
 	spawn()
 		var/Input/I = new("Get it wrong 3 times!", "num")
+		// Suggested replacement API:
+		//I.setMaxTries(3)
 		I.__maxTries = 3
 		I.__strictMode = 0 // Set strictMode off
 		var/a = I.getInput(src)
