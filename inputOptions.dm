@@ -6,9 +6,12 @@ inputOptions
 		for(var/a in typesof(/inputParser/default) - /inputParser/default)
 			var/inputParser/default/P = new a()
 			addParser(P.key, P)
-		addFormatter("default", /inputFormatter/default)
+		addFormatter("default", /inputFormatter/default/default)
 
 	proc
+		isEmpty(n)
+			return (!n || (whitespace(n) == length(n)))
+
 		short2full(short, full, ignorecase = 1)
 			if(!short) return 0
 
@@ -60,7 +63,7 @@ inputOptions
 		FORMAT_QUESTION = 1
 		FORMAT_ERROR = 2
 
-		BAD_INPUT = "AKLSJD&*^@#!*()_)JKSDAKLJS)(@*#($*(%*Y@()#)*(:"
+		INPUT_BAD = "AKLSJD&*^@#!*()_)JKSDAKLJS)(@*#($*(%*Y@()#)*(:"
 
 		ANSWER_TYPE_NUM = "num"
 		ANSWER_TYPE_LIST = "list"

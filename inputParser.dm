@@ -15,12 +15,41 @@ inputParser/default
 		key = "list"
 		parse(Input/I, n)
 			var/match = FALSE
-			var/textCmp = (I.__ignoreCase) ? "cmptext":"cmptextEx"
-			for(var/a in I.__answers)
+			var/list/L = I.__answers.Copy()
+
+			for(var/a in L)
 				if(I.__autoComplete)
 					match = inputOps.short2full(n, a, I.__ignoreCase)
 				else
-					match = call(textCmp)(n,a)
+					if(I.__ignoreCase)
+						match = cmptext(n,a)
+					else
+						match = cmptextEx(n,a)
+				if(match)
+					n = a
+					break
+
+			if(!match)
+				return new/inputError("Invalid answer.")
+			else
+				I.__input = n
+				return
+
+	// A more advanced, numbered list.
+	answer_numbered_list
+		key = "numlist"
+		parse(Input/I, n)
+			var/match = FALSE
+			var/list/L = I.__answers.Copy()
+
+			for(var/a in L)
+				if(I.__autoComplete)
+					match = inputOps.short2full(n, a, I.__ignoreCase)
+				else
+					if(I.__ignoreCase)
+						match = cmptext(n,a)
+					else
+						match = cmptextEx(n,a)
 				if(match)
 					n = a
 					break
@@ -38,6 +67,8 @@ inputParser/default
 	answer_yesno
 		key = "yesno"
 		parse(Input/I, n)
+			if(!I.__allowEmpty && inputOps.isEmpty(n))
+				return new/inputError("You must answer yes or no.")
 			if(inputOps.short2full(n,"yes", 1)) // Always ignore case
 				I.__input = "yes"
 				return
@@ -50,7 +81,7 @@ inputParser/default
 	answer_num
 		key = "num"
 		parse(Input/I, n)
-			if(!n || (inputOps.whitespace(n) == length(n)))
+			if(!I.__allowEmpty && inputOps.isEmpty(n))
 				return new/inputError("Not a number.")
 			var/t2n = text2num(n)
 			if("[n]" == "[t2n]")

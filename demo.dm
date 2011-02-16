@@ -1,5 +1,5 @@
 inputFormatter
-	send(txt)
+	send(txt,trg)
 		world << txt
 
 client/Command(T)
@@ -10,6 +10,26 @@ client/Command(T)
 		call(src, T)()
 	else
 		world << "Uncaught: [T]"
+
+
+client/proc/TestNlist()
+	spawn()
+		var/Input/I = new("Numbered list test", 
+				"numlist", "list")
+		I.setAnswerlist(list("bob", "joe", "stephen"))
+		var/a = I.getInput(src)
+		world << "Answer: [a]"
+
+client/proc/callbackFunc(c, n)
+	return new/inputError("Callback failure")
+
+client/proc/TestCallback()
+	spawn()
+		var/Input/I = new("Callback test",
+							inputOps.ANSWER_TYPE_ANY)
+		I.setCallback(src, "callbackFunc")
+		var/a = I.getInput(src)
+		world << "Answer: [a]"
 
 client/proc/TestConfirm()
 	spawn()

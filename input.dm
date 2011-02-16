@@ -7,6 +7,18 @@
 // Setter-functions for options
 Input
 	proc
+		setAllowEmpty(n)
+			if(__state != inputOps.STATE_READY) return
+			__allowEmpty = n
+
+		setDefault(n)
+			if(__state != inputOps.STATE_READY) return
+			__defaultAnswer = n
+
+		setDelonexit(n)
+			if(__state != inputOps.STATE_READY) return
+			__delOnExit = n
+
 		setAnswerlist(list/L)
 			if(!L || !length(L)) return
 			if(__state != inputOps.STATE_READY) return
@@ -47,7 +59,8 @@ Input
 		setCallback(o, n)
 			if(__state != inputOps.STATE_READY) return
 			if(n)
-				if(!hascall(o, n)) return
+				if(!hascall(o, n))
+					return
 				__callback = n
 				__callback_obj = o
 			else
@@ -87,13 +100,16 @@ Input
 		__confirmWith
 
 		// Options for parsing
+		__allowEmpty = FALSE
+		__defaultAnswer
+		__delOnExit = TRUE
 		__callback = null
 		__autoComplete = 0 // Don't auto-complete list answers by default
 		__timeout = 0
 		__maxTries = 0
-		__ignoreCase = 1// Case sensitive if 0
-		__confirm = 0 // Don't require confirmation by default
-		__strictMode = 1 // Let user re-try bad answers until they get a valid one by default.
+		__ignoreCase = TRUE// Case sensitive if 0
+		__confirm = FALSE // Don't require confirmation by default
+		__strictMode = TRUE // Let user re-try bad answers until they get a valid one by default.
 						 // Should be set to 0 if __maxTries is non-zero
 
 	proc
@@ -107,13 +123,15 @@ Input
 			var/inputError/E = __parser.parse(src, n)
 			if(!istype(E, /inputError) && __callback)
 				if(__callback_obj)
-					E = call(__callback_obj, __callback)(__input)
+					E = call(__callback_obj, __callback)(__target, __input)
 				else
-					E = call(__callback)(__input)
+					E = call(__callback)(__target, __input)
 
-			if(__confirmQuestion && !__confirm)
-				if(!cmptextEx(__input,__confirmWith))
-					E = new/inputError("Confirmation didn't match.")
+			world << "E=[E], input = [__input]"
+			if(!istype(E, /inputError))
+				if(__confirmQuestion && !__confirm)
+					if(!cmptextEx(__input,__confirmWith))
+						E = new/inputError("Confirmation didn't match.")
 
 			if(istype(E, /inputError))
 				__state = inputOps.STATE_ERROR
@@ -127,8 +145,8 @@ Input
 			if(__target && __target.__target == src)
 				__target.__target = null
 
-			world << "DEBUG: Cleaning up and returning input"
-			del src
+			__resetTemporaries()
+			if(__delOnExit) del src
 
 		__timeoutHeartbeat()
 			var/n = __timeout
@@ -194,7 +212,7 @@ Input
 							__resetTemporaries()
 							continue
 						else
-							__input = inputOps.BAD_INPUT
+							__input = inputOps.INPUT_BAD
 							break
 
 			spawn()
@@ -203,7 +221,7 @@ Input
 
 		__resetTemporaries()
 			if(__confirmQuestion)
-				__confirm = 1
+				__confirm = TRUE
 				__confirmWith = null
 			if(__maxTries)
 				__tryCount = 0
