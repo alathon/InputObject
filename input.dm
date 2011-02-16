@@ -7,27 +7,32 @@
 
 Input
 	var
-		list/__answers
 		inputFormatter/__formatter
 		inputParser/__parser
 		client/__target
 		inputError/__error
-		__callback
-		__callback_obj
 		__loopTime = 2
 		__input
 		__state
-		__answerType
 		__question
-		__timeoutTimestamp
+
+		// Support variables for parsing options
+		list/__answers
+		__callback_obj
 		__tryCount = 0
+		__confirmQuestion
+		__confirmWith
 
 		// Options for parsing
-		__autoComplete // Used by answer_list and answer_yesno
-		__timeout // NOT IMPLEMENTED
+		__answerType
+		__callback = null
+		__autoComplete = 0 // Don't auto-complete list answers by default
+		__timeout = 0
 		__maxTries = 0
-		__ignoreCase // Used by answer_list
-		__confirm // NOT IMPLEMENTED
+		__ignoreCase = 1// Case sensitive if 0
+		__confirm = 0 // Don't require confirmation by default
+		__strictMode = 1 // Let user re-try bad answers until they get a valid one by default.
+						 // Should be set to 0 if __maxTries is non-zero
 
 	proc
 		__errorUser()
@@ -44,9 +49,14 @@ Input
 				else
 					E = call(__callback)(__input)
 
+			if(__confirmQuestion && !__confirm)
+				if(!cmptextEx(__input,__confirmWith))
+					E = new/inputError("Confirmation didn't match.")
+
 			if(istype(E, /inputError))
 				__state = inputOps.STATE_ERROR
 				__error = E
+				world << "Error state: [E.error]"
 
 			else
 				__state = inputOps.STATE_DONE
@@ -84,6 +94,9 @@ Input
 		getQuestion()
 			return __question
 
+		getConfirmQuestion()
+			return __confirmQuestion
+
 		getInput(client/C)
 			if(__state != inputOps.STATE_READY)
 				world << "DEBUG: getInput(): Not in STATE_READY, quitting"
@@ -94,7 +107,6 @@ Input
 			C.__target = src
 			world << "DEBUG: getInput(): __state = inputOps.STATE_ACCEPT"
 
-			// __timeout option
 			if(__timeout)
 				__timeoutHeartbeat()
 
@@ -104,17 +116,34 @@ Input
 					sleep(__loopTime)
 
 				if(__state == inputOps.STATE_DONE)
+					if(__confirm)
+						__confirm = 0 // Don't want to confirm more than once.
+						__confirmWith = __input
+						__state = inputOps.STATE_ACCEPT
+						continue
 					break
 				else if(__state == inputOps.STATE_ERROR)
 					__errorUser()
 
-					// __maxTries option
 					if(__maxTries && (++__tryCount < __maxTries))
 						__state = inputOps.STATE_ACCEPT
 					else
-						__input = inputOps.BAD_INPUT
-						break
+						if(__strictMode)
+							__resetTemporaries()
+							continue
+						else
+							__input = inputOps.BAD_INPUT
+							break
 
 			spawn()
 				__cleanAndExit()
 			return __input
+
+		__resetTemporaries()
+			if(__confirmQuestion)
+				__confirm = 1
+				__confirmWith = null
+			if(__maxTries)
+				__tryCount = 0
+			__state = inputOps.STATE_ACCEPT
+

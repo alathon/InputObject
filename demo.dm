@@ -16,6 +16,14 @@ client/Command(T)
 	else
 		world << "Uncaught: [T]"
 
+client/proc/TestConfirm()
+	spawn()
+		var/Input/I = new("You should confirm this input.", "any")
+		I.__confirm = 1
+		I.__confirmQuestion = "Confirm what you just typed before, please."
+		var/a = I.getInput(src)
+		world << "Answer: [a]"
+
 client/proc/TestTime()
 	spawn()
 		var/Input/I = new("You have 3 seconds!", "any")
@@ -27,6 +35,7 @@ client/proc/TestTry()
 	spawn()
 		var/Input/I = new("Get it wrong 3 times!", "num")
 		I.__maxTries = 3
+		I.__strictMode = 0 // Set strictMode off
 		var/a = I.getInput(src)
 		world << "Answer: [a]"
 
