@@ -16,6 +16,13 @@ client/Command(T)
 	else
 		world << "Uncaught: [T]"
 
+client/proc/TestTime()
+	spawn()
+		var/Input/I = new("You have 3 seconds!", "any")
+		I.__timeout = 3
+		var/a = I.getInput(src)
+		world << "Answer: [a]"
+
 client/proc/TestTry()
 	spawn()
 		var/Input/I = new("Get it wrong 3 times!", "num")

@@ -19,12 +19,13 @@ Input
 		__state
 		__answerType
 		__question
+		__timeoutTimestamp
+		__tryCount = 0
 
 		// Options for parsing
 		__autoComplete // Used by answer_list and answer_yesno
 		__timeout // NOT IMPLEMENTED
-		__maxTries
-		__tryCount = 0
+		__maxTries = 0
 		__ignoreCase // Used by answer_list
 		__confirm // NOT IMPLEMENTED
 
@@ -57,6 +58,19 @@ Input
 			world << "DEBUG: Cleaning up and returning input"
 			del src
 
+		__timeoutHeartbeat()
+			var/n = __timeout
+			spawn()
+				while(n-- > 0)
+					if(__state == inputOps.STATE_ACCEPT)
+						sleep(10)
+					else
+						return
+
+				if(__state == inputOps.STATE_ACCEPT)
+					__state = inputOps.STATE_DONE
+					__input = inputOps.BAD_INPUT
+
 		receiveInput(n)
 			if(__state != inputOps.STATE_ACCEPT)
 				world << "DEBUG: receiveInput([n]): Not ready to accept input"
@@ -79,6 +93,11 @@ Input
 			__target = C
 			C.__target = src
 			world << "DEBUG: getInput(): __state = inputOps.STATE_ACCEPT"
+
+			// __timeout option
+			if(__timeout)
+				__timeoutHeartbeat()
+
 			while(1)
 				__questionUser()
 				while(__state == inputOps.STATE_ACCEPT)
