@@ -14,8 +14,8 @@ client/Command(T)
 
 client/proc/TestNlist()
 	spawn()
-		var/Input/I = new("Numbered list test", 
-				"numlist", "list")
+		var/question = "#1: Bob\n#2: Joe\n#3: Stephen\nAnswer: "
+		var/Input/I = new(question, inputOps.ANSWER_TYPE_NUMLIST)
 		I.setAnswerlist(list("bob", "joe", "stephen"))
 		var/a = I.getInput(src)
 		world << "Answer: [a]"

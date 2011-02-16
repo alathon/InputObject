@@ -127,7 +127,6 @@ Input
 				else
 					E = call(__callback)(__target, __input)
 
-			world << "E=[E], input = [__input]"
 			if(!istype(E, /inputError))
 				if(__confirmQuestion && !__confirm)
 					if(!cmptextEx(__input,__confirmWith))

@@ -9,11 +9,19 @@ inputParser/default
 	answer_any
 		key = "any"
 		parse(Input/I, n)
+			if(!I.__allowEmpty && inputOps.isEmpty(n))
+				return new/inputError("Please provide a non-empty answer.")
 			I.__input = n
 
 	answer_list
 		key = "list"
 		parse(Input/I, n)
+			if(inputOps.isEmpty(n))
+				if(I.__defaultAnswer)
+					n = I.__defaultAnswer
+				else if(!I.__allowEmpty)
+					return new/inputError("Invalid choice.")
+
 			var/match = FALSE
 			var/list/L = I.__answers.Copy()
 
@@ -30,7 +38,7 @@ inputParser/default
 					break
 
 			if(!match)
-				return new/inputError("Invalid answer.")
+				return new/inputError("Invalid choice.")
 			else
 				I.__input = n
 				return
