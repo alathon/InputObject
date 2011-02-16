@@ -10,7 +10,8 @@ inputOptions
 
 	proc
 		isEmpty(n)
-			return (!n || (whitespace(n) == length(n)))
+			if(!n || whitespace(n) == length(n)) return 1
+			return 0
 
 		short2full(short, full, ignorecase = 1)
 			if(!short) return 0

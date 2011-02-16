@@ -135,7 +135,6 @@ Input
 			if(istype(E, /inputError))
 				__state = inputOps.STATE_ERROR
 				__error = E
-				world << "Error state: [E.error]"
 
 			else
 				__state = inputOps.STATE_DONE
@@ -162,7 +161,6 @@ Input
 
 		receiveInput(n)
 			if(__state != inputOps.STATE_ACCEPT)
-				world << "DEBUG: receiveInput([n]): Not ready to accept input"
 				return
 
 			__parseInput(n)
@@ -178,13 +176,11 @@ Input
 
 		getInput(client/C)
 			if(__state != inputOps.STATE_READY)
-				world << "DEBUG: getInput(): Not in STATE_READY, quitting"
 				return
 
 			__state = inputOps.STATE_ACCEPT
 			__target = C
 			C.__target = src
-			world << "DEBUG: getInput(): __state = inputOps.STATE_ACCEPT"
 
 			if(__timeout)
 				__timeoutHeartbeat()
