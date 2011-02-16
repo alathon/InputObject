@@ -145,6 +145,7 @@ Input
 
 			__resetTemporaries()
 			if(__delOnExit) del src
+			else __state = inputOps.STATE_READY
 
 		__timeoutHeartbeat()
 			var/n = __timeout
@@ -176,8 +177,7 @@ Input
 
 		getInput(client/C)
 			if(__state != inputOps.STATE_READY)
-				return
-
+				return inputOps.INPUT_NOT_READY
 			__state = inputOps.STATE_ACCEPT
 			__target = C
 			C.__target = src
@@ -208,6 +208,7 @@ Input
 							continue
 						else
 							__input = inputOps.INPUT_BAD
+							world << "__input = [__input]"
 							break
 
 			spawn()
