@@ -7,7 +7,7 @@
 // Setter-functions for options
 Input
 	proc
-		setAllowEmpty(n)
+		setAllowempty(n)
 			if(__state != inputOps.STATE_READY) return
 			__allowEmpty = n
 
