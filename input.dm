@@ -208,7 +208,6 @@ Input
 							continue
 						else
 							__input = inputOps.INPUT_BAD
-							world << "__input = [__input]"
 							break
 
 			spawn()
