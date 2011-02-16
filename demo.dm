@@ -1,10 +1,3 @@
-Input
-	New(q, ip, formatter)
-		__state = inputOps.STATE_READY
-		__parser = inputOps.getParser(ip) || inputOps.getParser("any")
-		__formatter = inputOps.getFormatter(formatter) || inputOps.getFormatter("default")
-		__question = q
-
 inputFormatter
 	send(txt)
 		world << txt
@@ -20,56 +13,55 @@ client/Command(T)
 
 client/proc/TestConfirm()
 	spawn()
-		var/Input/I = new("You should confirm this input.", "any")
-		// Suggested replacement API:
-		//I.setConfirm("Confirm what you just typed before, please.")
-		I.__confirm = 1
-		I.__confirmQuestion = "Confirm what you just typed before, please."
+		var/Input/I = new("You should confirm this input.", 
+						  inputOps.ANSWER_TYPE_ANY)
+		I.setConfirm("Confirm what you just typed before, please.")
 		var/a = I.getInput(src)
 		world << "Answer: [a]"
 
 client/proc/TestTime()
 	spawn()
-		var/Input/I = new("You have 3 seconds!", "any")
-		// Suggested replacement API:
-		//I.setTimeout(3)
-		I.__timeout = 3
+		var/Input/I = new("You have 3 seconds!",
+						  inputOps.ANSWER_TYPE_ANY)
+		I.setTimeout(3)
 		var/a = I.getInput(src)
 		world << "Answer: [a]"
 
 client/proc/TestCSL()
 	spawn()
-		var/Input/I = new("Pick from a list", "list")
-		I.__answers = list("bob","joe","salamander")
-		I.__autoComplete = 1
+		var/Input/I = new("Pick from a list",
+						  inputOps.ANSWER_TYPE_LIST)
+		I.setAnswerlist(list("bob", "joe", "salamander"))
+		I.setAutocomplete(TRUE)
 		var/a = I.getInput(src)
 		world << "Answer: [a]"
 
 client/proc/TestTry()
 	spawn()
-		var/Input/I = new("Get it wrong 3 times!", "num")
-		// Suggested replacement API:
-		//I.setMaxTries(3)
-		I.__maxTries = 3
-		I.__strictMode = 0 // Set strictMode off
+		var/Input/I = new("Get it wrong 3 times!",
+						  inputOps.ANSWER_TYPE_NUM)
+		I.setMaxtries(3)
 		var/a = I.getInput(src)
 		world << "Answer: [a]"
 
 client/proc/TestNum()
 	spawn()
-		var/Input/I = new("Answer with a number", "num")
+		var/Input/I = new("Answer with a number",
+						  inputOps.ANSWER_TYPE_NUM)
 		var/a = I.getInput(src)
 		world << "Answer: [a]"
 
 client/proc/TestYesno()
 	spawn()
-		var/Input/I = new("Answer yes or no to this question.", "yesno")
+		var/Input/I = new("Answer yes or no to this question.",
+						  inputOps.ANSWER_TYPE_YESNO)
 		var/a = I.getInput(src)
 		world << "Answer: [a]"
 
 client/proc/TestInput()
 	spawn()
-		var/Input/I = new("Some Question", "any")
+		var/Input/I = new("Some Question",
+						  inputOps.ANSWER_TYPE_ANY)
 		var/a = I.getInput(src)
 		world << "Answer: [a]"
 

@@ -1,11 +1,74 @@
 // States:
 // inputOps.STATE_READY 	<-- The input object is ready to begin accepting input.
-// inputOps.STATE_INIT  	<-- The input object is setting up, and is not yet ready.
 // inputOps.STATE_ACCEPT    <-- The input object is accepting input.
 // inputOps.STATE_DONE		<-- The input object is done. (This and above state the same?)
 // inputOps.STATE_ERROR		<-- Input was received, and bad.
 
+// Setter-functions for options
 Input
+	proc
+		setAnswerlist(list/L)
+			if(!L || !length(L)) return
+			if(__state != inputOps.STATE_READY) return
+			__answers = L
+
+		setTimeout(n)
+			if(__state != inputOps.STATE_READY) return
+			if(!isnum(n)) n = text2num(n)
+			__timeout = n
+
+		setConfirm(msg)
+			if(__state != inputOps.STATE_READY) return
+			if(!msg)
+				__confirm = 0
+				__confirmQuestion = null
+			else
+				__confirm = 1
+				__confirmQuestion = msg
+
+		setAutocomplete(n)
+			if(__state != inputOps.STATE_READY) return
+			__autoComplete = n
+
+		setIgnorecase(n)
+			if(__state != inputOps.STATE_READY) return
+			__ignoreCase = n
+
+		setStrictmode(n)
+			if(__state != inputOps.STATE_READY) return
+			__strictMode = n
+
+		setMaxtries(n)
+			if(__state != inputOps.STATE_READY) return
+			if(!isnum(n) || n < 0) return
+			__maxTries = n
+			if(__maxTries) __strictMode = FALSE
+
+		setCallback(o, n)
+			if(__state != inputOps.STATE_READY) return
+			if(n)
+				if(!hascall(o, n)) return
+				__callback = n
+				__callback_obj = o
+			else
+				__callback = o
+
+Input
+	New(__question, __parser, __formatter)
+		if(__formatter)
+			src.__formatter = inputOps.getFormatter(__formatter)
+		else
+			src.__formatter = inputOps.getFormatter("default")
+
+		if(__parser)
+			src.__parser = inputOps.getParser(__parser)
+		else
+			src.__parser = inputOps.getParser("any")
+
+		src.__question = __question
+		src.__state = inputOps.STATE_READY
+
+
 	var
 		inputFormatter/__formatter
 		inputParser/__parser

@@ -61,3 +61,8 @@ inputOptions
 		FORMAT_ERROR = 2
 
 		BAD_INPUT = "AKLSJD&*^@#!*()_)JKSDAKLJS)(@*#($*(%*Y@()#)*(:"
+
+		ANSWER_TYPE_NUM = "num"
+		ANSWER_TYPE_LIST = "list"
+		ANSWER_TYPE_YESNO = "yesno"
+		ANSWER_TYPE_ANY = "any"
