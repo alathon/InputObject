@@ -78,8 +78,8 @@ Input
 						return
 
 				if(__state == inputOps.STATE_ACCEPT)
-					__state = inputOps.STATE_DONE
-					__input = inputOps.BAD_INPUT
+					__state = inputOps.STATE_ERROR
+					__error = new/inputError("Input timed out")
 
 		receiveInput(n)
 			if(__state != inputOps.STATE_ACCEPT)
@@ -145,5 +145,8 @@ Input
 				__confirmWith = null
 			if(__maxTries)
 				__tryCount = 0
+			if(__timeout)
+				__timeoutHeartbeat()
 			__state = inputOps.STATE_ACCEPT
+
 
