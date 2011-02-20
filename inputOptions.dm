@@ -64,8 +64,8 @@ inputOptions
 		FORMAT_QUESTION = 1
 		FORMAT_ERROR = 2
 
-		INPUT_BAD = "AKLSJD&*^@#!*()_)JKSDAKLJS)(@*#($*(%*Y@()#)*(:"
-		INPUT_NOT_READY = "AKLSDJLKASJD()@#$*)@(#*ASKLJDLK"
+		INPUT_BAD = "INPUT_BAD&*^@#!*()_)JKSDAKLJS)(@*#($*(%*Y@()#)*(:"
+		INPUT_NOT_READY = "INPUT_NOT_READYSDJLKASJD()@#$*)@(#*ASKLJDLK"
 
 		ANSWER_TYPE_NUM = "num"
 		ANSWER_TYPE_LIST = "list"

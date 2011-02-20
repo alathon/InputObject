@@ -160,6 +160,18 @@ Input
 					__state = inputOps.STATE_ERROR
 					__error = new/inputError("Input timed out")
 
+		copy()
+			var/Input/I = new()
+			var/list/dont_copy = list("type","parent_type","tag","vars")
+			for(var/a in src.vars)
+				if(a in dont_copy) continue
+				if(istype(src.vars[a], /list))
+					var/list/L = src.vars[a]
+					I.vars[a] = L.Copy()
+				else
+					I.vars[a] = src.vars[a]
+			return I
+
 		receiveInput(n)
 			if(__state != inputOps.STATE_ACCEPT)
 				return
